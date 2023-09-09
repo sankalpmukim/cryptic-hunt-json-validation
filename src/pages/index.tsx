@@ -32,6 +32,15 @@ export default function Home() {
             value={jsonData}
             onChange={(e) => setJsonData(e ?? "")}
             defaultValue={defaultValue}
+            onMount={(editor, monaco) => {
+              editor.focus();
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/ban-ts-comment
+              monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
+                enableSchemaRequest: true,
+              });
+            }}
           />
         </div>
         <div className="flex-1 rounded border p-4">
