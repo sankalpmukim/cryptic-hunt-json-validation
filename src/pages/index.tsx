@@ -6,7 +6,7 @@ import useJsonChecker from "~/hooks/useJsonChecker";
 import schema, { defaultValue } from "~/schema";
 
 export default function Home() {
-  const [jsonData, setJsonData] = useState("");
+  const [jsonData, setJsonData] = useState(defaultValue);
   const isMobileScreen = useIsMobile();
 
   const [errors, isJsonValid] = useJsonChecker(jsonData, schema);
