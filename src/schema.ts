@@ -1,5 +1,23 @@
 import { z } from "zod";
 
+export const defaultValue = `
+{
+  "$schema": "https://cryptichuntjson.sankalpmukim.dev/schema.json",
+  "name": "My Hunt",
+  "description": "My Hunt Description",
+  "phase": 1,
+  "isQR": true,
+  "question": {
+    "title": "My Question",
+    "description": "My Question Description",
+    "answer": "My Answer",
+    "pointsAwarded": 10,
+    "costofHint": 5,
+    "hint": "My Hint"
+  }
+}
+`.trim();
+
 const mySchema = z
   .object({
     $schema: z

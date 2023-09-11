@@ -3,7 +3,7 @@ import { useState } from "react";
 import Editor from "@monaco-editor/react";
 import useIsMobile from "~/hooks/useIsMobile";
 import useJsonChecker from "~/hooks/useJsonChecker";
-import schema from "~/schema";
+import schema, { defaultValue } from "~/schema";
 
 export default function Home() {
   const [jsonData, setJsonData] = useState("");
@@ -31,13 +31,14 @@ export default function Home() {
             className="w-full resize-none rounded border p-2"
             value={jsonData}
             onChange={(e) => setJsonData(e ?? "")}
+            defaultValue={defaultValue}
           />
         </div>
         <div className="flex-1 rounded border p-4">
-          <h3 className="mb-2 font-semibold">{`Input JSON Schema ${isJsonValid}`}</h3>
+          <h3 className="mb-2 font-semibold">
+            {isJsonValid ? `JSON is valid` : `Here are the errors`}
+          </h3>
           <textarea
-            // value={jsonSchema}
-            // onChange={(e) => setJsonSchema(e.target.value)}
             rows={10}
             className="w-full resize-none rounded border p-2"
             readOnly
