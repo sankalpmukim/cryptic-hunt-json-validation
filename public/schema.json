@@ -8,40 +8,43 @@
           "type": "string",
           "const": "https://cryptichuntjson.sankalpmukim.dev/schema.json"
         },
-        "name": {
-          "type": "string"
-        },
+        "name": { "type": "string", "pattern": "^Phase\\ " },
         "description": {
-          "type": "string"
+          "type": "object",
+          "properties": {
+            "Question": { "type": "string" },
+            "Difficulty": {
+              "type": "string",
+              "enum": ["Easy", "Medium", "Hard"]
+            },
+            "Authors": { "type": "array", "items": { "type": "string" } }
+          },
+          "required": ["Question", "Difficulty", "Authors"],
+          "additionalProperties": false
         },
-        "phase": {
-          "type": "number",
-          "minimum": 1,
-          "maximum": 10
-        },
-        "isQR": {
-          "type": "boolean"
+        "phase": { "type": "number", "minimum": 1, "maximum": 10 },
+        "isQR": { "type": "boolean" },
+        "qrLink": {
+          "type": "array",
+          "items": { "type": "string", "format": "uri" }
         },
         "question": {
           "type": "object",
           "properties": {
-            "title": {
-              "type": "string"
-            },
-            "description": {
-              "type": "string"
-            },
-            "answer": {
-              "type": "string"
-            },
+            "title": { "type": "string" },
+            "description": { "type": "string" },
+            "answer": { "type": "string" },
             "pointsAwarded": {
-              "type": "number"
+              "anyOf": [
+                { "type": "number", "enum": [100, 200] },
+                { "type": "number", "const": 350 }
+              ]
             },
-            "costofHint": {
-              "type": "number"
-            },
-            "hint": {
-              "type": "string"
+            "costofHint": { "type": "number" },
+            "hint": { "type": ["string", "null"] },
+            "images": {
+              "type": "array",
+              "items": { "type": "string", "format": "uri" }
             }
           },
           "required": [
@@ -50,12 +53,20 @@
             "answer",
             "pointsAwarded",
             "costofHint",
-            "hint"
+            "hint",
+            "images"
           ],
           "additionalProperties": false
         }
       },
-      "required": ["name", "description", "phase", "isQR", "question"],
+      "required": [
+        "name",
+        "description",
+        "phase",
+        "isQR",
+        "qrLink",
+        "question"
+      ],
       "additionalProperties": false,
       "description": "My neat question schema"
     }
