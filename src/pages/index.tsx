@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import Editor from "@monaco-editor/react";
 import useIsMobile from "~/hooks/useIsMobile";
 import useJsonChecker from "~/hooks/useJsonChecker";
@@ -10,6 +10,14 @@ export default function Home() {
   const isMobileScreen = useIsMobile();
 
   const [errors, isJsonValid] = useJsonChecker(jsonData, schema);
+  const [marker, setMarker] = useState<string[]>([]);
+
+  useEffect(() => {
+    const textarea = document.querySelector('textarea[name="output"]');
+    if (textarea instanceof HTMLTextAreaElement && errors.length == 0 && marker.length > 0) {
+      textarea.value = marker.join("\n");
+    }
+  }, [marker]);
 
   return (
     <>
@@ -34,6 +42,14 @@ export default function Home() {
             defaultValue={defaultValue}
             onMount={(editor, monaco) => {
               editor.focus();
+              monaco.editor.onDidChangeMarkers(([uri]) => {
+                const markers = monaco.editor.getModelMarkers({resource: uri})
+                const marker = markers.map(
+                  ({ message, startLineNumber, startColumn}) =>
+                    `${message} (line ${startLineNumber} column ${startColumn})`,
+                );
+                setMarker(marker);
+              });
               // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore
               // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/ban-ts-comment
@@ -48,6 +64,7 @@ export default function Home() {
             {isJsonValid ? `JSON is valid` : `Here are the errors`}
           </h3>
           <textarea
+            name = "output"
             rows={10}
             className="w-full resize-none rounded border p-2"
             readOnly
